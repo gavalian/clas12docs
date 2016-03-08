@@ -118,3 +118,68 @@ In general to construct a particle and test it in fast MC, the following code is
     System.out.println("not even close");
   }
 
+
+Adding Resolutions to Reconstructed Particles
+=============================================
+
+The code changes properties of reconstructed particles (such as momenta and angle)
+through IParticleResolution interface. User supplies the implementation of the code
+to Fast Monte Carlo for specific PID, the rest is done automatically by fast MC code.
+Notice and additional import statement in the code (import org.jlab.clas.pdg.*;).
+Here is an example of how it can be used:
+
+.. code-block:: java
+
+  //****************************************************
+  // Particle generator with decay module
+  //****************************************************
+  import org.jlab.clasrec.io.*;
+  import org.jlab.clas.physics.*;
+  import org.jlab.clas.reactions.*;
+  import org.jlab.clas.physics.*;
+  import org.jlab.clas.pdg.*;
+  import org.jlab.clas12.fastmc.*;
+  import org.jlab.geom.prim.*;
+  import org.jlab.geom.*;
+
+  ParticleGenerator  electron = new ParticleGenerator(  11 , // electron PID  
+               1.0  ,    5.0, // momentum min/max 
+               7.0  ,   25.0, // theta (deg) min/max
+          -180.0  ,  180.0 ); // phi (deg) min/max
+
+
+  CLAS12FastMC    fastMC = new CLAS12FastMC(-1.0,0.5);
+  ParticleSwimmer pswim = new ParticleSwimmer();
+
+  // This part implements an interface for callback on particle
+  // type 11 (electron), and it will be called whenever any electron
+  // passes the detectors cuts and appears in reconstructed event
+  // it's momenta will be changed with gaussian distribution of 2%
+  fastMC.addResolutionFunc( 11,new IParticleResolution(){
+
+    @Override
+    void apply(Particle p){
+      double mom = p.p();
+      double fraction = PhysicsConstants.getRandomGauss(0.0,0.02);
+      p.setP(mom + mom*fraction);
+    }
+
+  });
+
+  PhysicsEvent  genEvent = new PhysicsEvent();
+
+  for(int loop = 0; loop < 20; loop++){
+    
+    Particle ep = electron.getParticle();
+    genEvent.clear();
+    genEvent.addParticle(ep);
+
+    PhysicsEvent recEvent = fastMC.getEvent(genEvent);
+
+    System.out.println("\n\n------> event # " + loop);
+    System.out.println(genEvent.toLundString());
+    System.out.println(recEvent.toLundString());
+
+  }
+
+

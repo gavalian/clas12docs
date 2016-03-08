@@ -118,3 +118,49 @@ At the time of writing this tutorial all constants in the FTOF table were set to
 not look particularly interesting.
 
 .. image:: images/calibration-constant-plot.png
+
+
+Reading Calibration Constants Indexed
+-------------------------------------
+
+To provide a common interface to all detector systems CLAS12 calibration constants are kept in strictly
+defined table structures. All related contants that are calibrated at the same time are kept in a table
+with sector,layer and component being a column in a table, here is an example of ftof table:
+
+.. code-block::  bash
+
+	/calibration/ftof> cat effective_velocity
+	+-------------------------------------------------------------------------------------------------+
+	| sector     | layer      | component  | veff_left  | veff_right | veff_left_err | veff_right_err |
+	| int        | int        | int        | double     | double     | double        | double         |
+	+-------------------------------------------------------------------------------------------------+
+	| 1          | 1          | 1          | 16.00      | 16.00      | 0.32          | 0.32           |
+	| 1          | 1          | 2          | 16.00      | 16.00      | 0.32          | 0.32           |
+	| 1          | 1          | 3          | 16.00      | 16.00      | 0.32          | 0.32           |
+	| 1          | 1          | 4          | 16.00      | 16.00      | 0.32          | 0.32           |
+	| 1          | 1          | 5          | 16.00      | 16.00      | 0.32          | 0.32           |
+	| 1          | 1          | 6          | 16.00      | 16.00      | 0.32          | 0.32           |
+	| 1          | 1          | 7          | 16.00      | 16.00      | 0.32          | 0.32           |
+	| 1          | 1          | 8          | 16.00      | 16.00      | 0.32          | 0.32           |
+	| 1          | 1          | 9          | 16.00      | 16.00      | 0.32          | 0.32           |
+	....
+	....
+
+To read these kind of tables in the software use the following script:
+
+.. code-block::  java
+
+	ClibrationConstants calibAtten = new CalibrationConstants();
+    calibAtten.loadTable("/calibration/ftof/attenuation", 10, "default");
+        
+    System.out.println("ATTENUATION LEFT/RIGHT  = "
+            + calibAtten.getEntry("attlen_left", 2, 1, 15)
+            + " / " + calibAtten.getEntry("attlen_right", 2, 1, 15));
+
+
+The code requests constants for sector=2, layer=1 and paddle=15. The produced printout will look like:
+
+.. code-block::  bash
+
+	ATTENUATION LEFT/RIGHT  = 187.53 / 187.53
+

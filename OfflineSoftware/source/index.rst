@@ -40,6 +40,7 @@ CLAS12 Input/Output Packages:
    io/readingRawEvioFiles
    io/clasio
    io/bosio
+   io/hipo
 
 Plotting Package:
 -----------------

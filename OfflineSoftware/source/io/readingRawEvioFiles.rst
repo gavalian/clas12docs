@@ -33,12 +33,14 @@ To read raw files one must use:
     import org.jlab.evio.decode.*;
     import org.jlab.clas.detector.*;
     import org.jlab.clas12.detector.*;
-
-    outputFile = args[0];
+    import org.root.pad.*;
+    import org.root.histogram.*;
+    
+    inputFile = args[0];
 
 
     EvioSource  reader = new EvioSource();
-    reader.open(input);
+    reader.open(inputFile);
     EventDecoder decoder = new EventDecoder();
     int icounter = 0;
     
