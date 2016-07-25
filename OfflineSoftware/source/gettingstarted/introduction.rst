@@ -98,6 +98,12 @@ To download the development version of the package use the link:
 
    wget https://userweb.jlab.org/~gavalian/software/coatjava/coatjava-2.0.tar.gz
 
+To download newest branch of development use command:
+
+.. code-block:: bash
+
+   wget https://userweb.jlab.org/~gavalian/software/coatjava/coatjava-3.0.tar.gz
+
 
 Development environment
 =======================
