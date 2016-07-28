@@ -47,10 +47,18 @@ To produce DST's which contain output from Event Builder alone, one has to use:
 
 .. code-block:: java
 
-  >bin/hipo-writer -lz4 -b EVENTHB:GenPart output.hipo input1.evio input2.evio input3.evio
+  >bin/hipo-writer -lz4 -b EVENTHB output.hipo input1.evio input2.evio input3.evio
 
 This will output reconstructed particle bank, associated detector response bank and generated
 particle banks.
+
+To see the entire list of available banks and sections use command:
+
+.. code-block:: java
+
+  >bin/hipo-writer -list
+
+
 
 Reading Hipo Files
 ==================
