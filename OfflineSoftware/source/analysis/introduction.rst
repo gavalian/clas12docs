@@ -85,8 +85,8 @@ particle bank with the PID assigned by standrard Event Builder. Example:
 
 .. code-block:: java
 
-import org.jlab.io.evio.*;
-import org.jlab.clas.physics.*;
+   import org.jlab.io.evio.*;
+   import org.jlab.clas.physics.*;
 
    EvioSource reader = new EvioSource();
    reader.open("myrec.evio");
@@ -150,18 +150,18 @@ The following example loops through events and plots the missing mass of two pio
 
 .. code-block:: java
 
-import org.jlab.io.evio.*;
-import org.jlab.groot.data.*;
-import org.jlab.groot.ui.*;
-import org.jlab.clas.physics.*;
+   import org.jlab.io.evio.*;
+   import org.jlab.groot.data.*;
+   import org.jlab.groot.ui.*;
+   import org.jlab.clas.physics.*;
 
-EvioSource reader = new EvioSource();
-reader.open("testcoat.evio");
-GenericKinematicFitter fitter = new GenericKinematicFitter(11.0);
-EventFilter  filter = new EventFilter("11:211:-211:X+:X-:Xn");
-H1F MxPiPi = new H1F("MxPiPi",120,0.01,0.35);
+   EvioSource reader = new EvioSource();
+   reader.open("myrec.evio");
+   GenericKinematicFitter fitter = new GenericKinematicFitter(11.0);
+   EventFilter  filter = new EventFilter("11:211:-211:X+:X-:Xn");
+   H1F MxPiPi = new H1F("MxPiPi",120,0.01,0.35);
 
-while(reader.hasEvent()==true){
+   while(reader.hasEvent()==true){
      EvioDataEvent event = reader.getNextEvent();
      PhysicsEvent  recEvent  = fitter.getPhysicsEvent(event);
 
@@ -169,12 +169,12 @@ while(reader.hasEvent()==true){
         Particle mx_epipi = recEvent.getParticle("[b]+[t]-[11]-[211]-[-211]");
         MxPiPi.fill(mx_epipi.mass());
      }
-}
+   }
 
-TCanvas c1 = new TCanvas("c1",1000,800);
-c1.divide(1,1);
-c1.cd(0);
-c1.draw(MxPiPi);
+   TCanvas c1 = new TCanvas("c1",1000,800);
+   c1.divide(1,1);
+   c1.cd(0);
+   c1.draw(MxPiPi);
 
 The code loops through events and picks events corresponding to the given filter
 then gets particle for given string syntax and fills the mass histogram.
