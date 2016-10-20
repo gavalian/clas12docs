@@ -25,7 +25,7 @@ records out of BOS file. The command to filter BOS is:
 
 .. code-block:: bash
 
-   /group/clas12/packages/bos/bosutility -filter -b "HEADHEVTEVNTECPBCCPBSCPBLCPB" filtered_run_28456_A00.bos run_28456_A00.bos
+   /group/clas12/packages/bos/bosutility -filter -b "HEADHEVTEVNTECPBCCPBSCPBLCPB" run_28456_A00.bos
 
 The "-b" option specifies which banks should be in the final filtered BOS file, 
 if needed other banks can be added as well. Note ! Banks with names shorter than 
@@ -36,66 +36,20 @@ Converting BOS to EVIO
 ======================
 
 The convertor program is called bos2evio and it is included in the coatjava
-package. The program will convert BOS file into EVIO, and there are options
-to use the SEB scheme or A1C bank scheme.
-
-For SEB scheme use:
+package. Starting from coatjava 3.0, the bos files are converted into HIPO
+files with compression. To convert a bos file on CUE machines use:
 
 .. code-block:: bash
 
-   >bin/bos2evio -seb myoutput.evio run018567.A00.B00
+   >/group/clas12/packages/coatjava-3.0/bin/bos2hipo -lz4 myoutput.hipo run018567.A00.B00
 
-For A1C scheme (PART, TBID and TBER banks) use:
+The newly created file can be viewed with eviodump program:
 
 .. code-block:: bash
 
-   >bin/bos2evio -a1c myoutput.evio run018567.A00.B00 run018567.A00.B01
+   >/group/clas12/packages/coatjava-3.0/bin/eviodump myoutput.hipo
 
-NOTE. Multiple files can be combined into one run file.
-
-
-Analyzing Data
-==============
-
-Once converted to EVIO format legacy CLAS6 data can be analyzed similar to CLAS12 
-data. Here is and example script that plots invariant mass of two pions from a data 
-run.
-
-.. code-block:: java
-
-   import org.jlab.evio.clas12.*;
-   import org.jlab.clas.physics.*;
-   import org.root.histogram.*;
-   import org.root.pad.*;
-   import org.jlab.clas12.physics.*;
-
-   filename = args[0];
-
-   EventFilter  filter = new EventFilter("11:211:-211:X+:X-:Xn");
-   EvioSource reader = new EvioSource();
-   reader.open(filename);
-
-   H1D H100 = new H1D("H100","M [GeV]","",60,0.25,0.8);
-
-   GenericKinematicFitter fitter = new GenericKinematicFitter(11.0,"11:X+:X-:Xn");
-   int counter = 0;
-   while(reader.hasEvent()==true){
-        counter++;
-        EvioDataEvent event = reader.getNextEvent();
-        PhysicsEvent  physEvent = fitter.getPhysicsEvent(event);
-        if(filter.isValid(physEvent)==true){
-            Particle pipi = physEvent.getParticle("[211]+[-211]");
-            H100.fill(pipi.mass());
-        }
-  }
-
-  TCanvas c1 = new TCanvas("c1","Physics Analysis",800,600,1,1);
-  c1.setFontSize(18);
-  c1.cd(0);
-  H100.setTitle("Two Pion Invariant Mass");
-  H100.setLineWidth(2);
-  H100.setLineColor(2);
-  c1.draw(H100);
+This will printout banks in each event, to view each bank type the bank name in the prompt.
 
 
-For more detailed documentation on how to use CLAS12 physics classes see "Analyzing Reconstructed Data".
+
