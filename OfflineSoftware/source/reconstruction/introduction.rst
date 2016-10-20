@@ -10,11 +10,11 @@ Event Simulation
 ================
 
 For sumulating CLAS12 detector the GEMC package is used. The input
-to GEMC is an event file in LUND format. The full documentation
-on how to run GEMC can be found at: https://gemc.jlab.org.
+to GEMC can be an event file in LUND format. It also has its own event generator.
+The full documentation on how to run GEMC can be found at: https://gemc.jlab.org.
 
 Since coatjava 3.0 simulated GEMC files have to be first prepared to 
-run reconstruction. There is an utility inclused in the coatjava package
+run reconstruction. There is an utility included in the coatjava package
 to add header information to the file. Run gemc output through:
 
 .. code-block:: bash
