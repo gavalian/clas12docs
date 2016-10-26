@@ -60,11 +60,13 @@ two descriptors: "CUSTOM::part" and "CUSTOM::detector". Here is an example groov
 file and displaying bank information.
 
 .. code-block:: java
+   
+   import org.jlab.io.evio.*;
+   
+   EvioFactory e = new EvioFactory();
 
-   import org.jlab.evio.clas12.*;
-
-   EvioFactory.loadDictionary(".");
-   EvioFactory.getDictionary().show();
+   e.loadDictionary(".");
+   e.getDictionary().show();
 
 The factory is initialized with XML files found in current directory and the content of 
 the dictionary is displayed. The output is:
@@ -90,7 +92,7 @@ particular bank descriptor, use:
 
 .. code-block:: java
 
-   EvioFactory.getDictionary().getDescriptor("CUSTOM::detector").show();
+   e.getDictionary().getDescriptor("CUSTOM::detector").show();
 
 Output:
 
