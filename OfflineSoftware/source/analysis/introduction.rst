@@ -42,7 +42,7 @@ files. The XML descriptors are located in etc/bankdef/clas12 directory. Followin
 script will run through events in the file:
 
 .. code-block:: java
-    
+	    
        import org.jlab.io.evio.*;
        
        EvioSource reader = new EvioSource();
@@ -84,23 +84,23 @@ particle bank with the PID assigned by standrard Event Builder. Example:
 
 
 .. code-block:: java
-
+   
    import org.jlab.io.evio.*;
    import org.jlab.clas.physics.*;
-
+   
    EvioSource reader = new EvioSource();
    reader.open("myrec.evio");
    // create new kinematic fitter, with beam energy 11.0 GeV and electron filter
    GenericKinematicFitter fitter = new GenericKinematicFitter(11.0);
    
    while(reader.hasEvent()==true){
-	EvioDataEvent event = reader.getNextEvent();
-        PhysicsEvent  recEvent  = fitter.getPhysicsEvent(event);
-        PhysicsEvent  genEvent  = fitter.getGeneratedEvent(event);
-	System.out.println(genEvent.toLundString());
-	System.out.println(recEvent.toLundString());
+      EvioDataEvent event = reader.getNextEvent();
+      PhysicsEvent  recEvent  = fitter.getPhysicsEvent(event);
+      PhysicsEvent  genEvent  = fitter.getGeneratedEvent(event);
+      System.out.println(genEvent.toLundString());
+      System.out.println(recEvent.toLundString());
    }
-   
+
 This will print out on the screen generated event and reconstructed event.
 
 Working with Physics Events
@@ -116,7 +116,7 @@ respectively. EventFilter object must be created to check the final state
 of the event.
 
 .. code-block:: java
-
+   
    ...
    EventFilter  filter = new EventFilter("11:2212:-211:X+:X-:Xn");
    if(filter.isValid(recEvent)==true){
@@ -149,28 +149,28 @@ as "[2212,0]".
 The following example loops through events and plots the missing mass of two pions.
 
 .. code-block:: java
-
+   
    import org.jlab.io.evio.*;
    import org.jlab.groot.data.*;
    import org.jlab.groot.ui.*;
    import org.jlab.clas.physics.*;
-
+   
    EvioSource reader = new EvioSource();
    reader.open("myrec.evio");
    GenericKinematicFitter fitter = new GenericKinematicFitter(11.0);
    EventFilter  filter = new EventFilter("11:211:-211:X+:X-:Xn");
    H1F MxPiPi = new H1F("MxPiPi",120,0.01,0.35);
-
+   
    while(reader.hasEvent()==true){
      EvioDataEvent event = reader.getNextEvent();
      PhysicsEvent  recEvent  = fitter.getPhysicsEvent(event);
-
+   
      if(filter.isValid(recEvent)==true){
         Particle mx_epipi = recEvent.getParticle("[b]+[t]-[11]-[211]-[-211]");
         MxPiPi.fill(mx_epipi.mass());
      }
    }
-
+   
    TCanvas c1 = new TCanvas("c1",1000,800);
    c1.divide(1,1);
    c1.cd(0);
