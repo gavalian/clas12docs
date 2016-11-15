@@ -234,6 +234,10 @@ The code loops through events and picks events corresponding to the given filter
 then gets particle for given string syntax and fills the mass histogram.
 The missing mass histogram is then fitted by a Gaussian.
 
+You should obtain the following graph.
+
+.. image:: images/MxPiPi.png
+
 
 Selecting particles
 ===================
