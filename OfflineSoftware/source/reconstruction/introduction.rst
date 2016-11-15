@@ -24,7 +24,9 @@ to add header information to the file. Run gemc output through:
 First argument is the input evio file produced by GEMC.
 Second argument is the run number to be written to header of each event (event number is added automatically).
 Third and fourth arguments are torus and solenoid magnetic fields respectively.
-The output evio file will contain a bank with run configuration. Here is the structure of this bank:
+The output evio file, output.0.evio, will contain a bank with run configuration. 
+You want to use the output file for the steps described after.
+Here is the structure of this bank:
 
 .. code-block:: bash
 

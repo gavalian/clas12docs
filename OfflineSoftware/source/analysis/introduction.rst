@@ -147,37 +147,96 @@ Entry "[2212,1]" takes the second (skip=1) proton from the event, "[2212,0]" tak
 event, if no skip parameter is mentioned first particle is assumed "[2212]" is same 
 as "[2212,0]".
 The following example loops through events and plots the missing mass of two pions.
+The data used in the following example can be generated from the .dat (Lund) files here: 
+https://userweb.jlab.org/~gcharles/Tutorials/.
+Then, wherever you have Gemc and Coatjava working, successively types the following commands:
+
+.. code-block:: bash
+   
+   > gemc /group/clas12/clas12.gcard -INPUT_GEN_FILE="LUND, clasdispr.00.e11.000.emn0.75tmn.09.xs65.61nb.113.0000.dat" -OUTPUT="evio, test.evio" -RUNNO=11 -USE_GUI=0 -N=100
+   > bin/gemc-evio test.evio 10 -1.0 1.0
+   > bin/clara-rec -t 1 -r etc/services/reconstruction.yaml output.0.evio output_rec.evio
+
+These commands are explained earlier in this tutorial.
+The generation of a sufficient number of events to obtain nice results being long, you
+are advised to generate only a few hundred events. If you want to see the result for more events,
+a file containing 10000 events has been generated and can be found here: https://userweb.jlab.org/~gcharles/Tutorials/
+The groovy script to obtain the missing mass plot can be downloaded in the same folder and is duplicated here.
 
 .. code-block:: java
    
-   import org.jlab.io.evio.*;
-   import org.jlab.groot.data.*;
-   import org.jlab.groot.ui.*;
-   import org.jlab.clas.physics.*;
+   import org.jlab.clas.physics.EventFilter;
+   import org.jlab.groot.ui.TCanvas;
+   import org.jlab.clas.physics.GenericKinematicFitter;
+   import org.jlab.clas.physics.Particle;
+   import org.jlab.clas.physics.RecEvent;
+   import org.jlab.groot.data.H1F;
+   import org.jlab.io.evio.EvioDataChain;
+   import org.jlab.io.evio.EvioDataEvent;
+   import org.jlab.groot.math.*;
+   import org.jlab.groot.graphics.*;
+   import javax.swing.JFrame;
+   import org.jlab.groot.fitter.*;
+
+   EvioDataChain reader = new EvioDataChain();
+     reader.addFile("output_rec.evio"); //Add Reconstructed Event File
+     reader.open();
+   GenericKinematicFitter fitter = new GenericKinematicFitter(11.0); //Sets Beam Energy to 11.0 GeV
+     EventFilter filter = new EventFilter("11:211:-211:X+:X-:Xn"); //Filters events with electrons pi+ and pi-
    
-   EvioSource reader = new EvioSource();
-   reader.open("myrec.evio");
-   GenericKinematicFitter fitter = new GenericKinematicFitter(11.0);
-   EventFilter  filter = new EventFilter("11:211:-211:X+:X-:Xn");
-   H1F MxPiPi = new H1F("MxPiPi",120,0.01,0.35);
+   //Declare Histogram and enable stat box
+   H1F MxPiPi = new H1F("MxPiPi",300,-1,4); 
+     MxPiPi.setOptStat("1110");
+     MxPiPi.setTitleX("Mass, GeV");
    
-   while(reader.hasEvent()==true){
-     EvioDataEvent event = reader.getNextEvent();
-     PhysicsEvent  recEvent  = fitter.getPhysicsEvent(event);
+   //Create a gaussian and set the limits as well as parameters below which can be changed
+   F1D f1 = new F1D("f1","[amp]*gaus(x,[mean],[sigma])", 0, 2); 
+     f1.setParameter(0, 200.0);
+     f1.setParameter(1, 1.0);
+     f1.setParameter(2, 1.0);
    
-     if(filter.isValid(recEvent)==true){
-        Particle mx_epipi = recEvent.getParticle("[b]+[t]-[11]-[211]-[-211]");
-        MxPiPi.fill(mx_epipi.mass());
-     }
+   
+   int eventCounter = 1;
+   while(reader.hasEvent()==true)
+   {
+	   eventCounter++;
+	   EvioDataEvent event = reader.getNextEvent();
+	   RecEvent recEvent  = fitter.getRecEvent(event);
+	   recEvent.doPidMatch();
+	   if(filter.isValid(recEvent.getReconstructed()))
+	   {
+		   Particle ppippim = recEvent.getReconstructed().getParticle("[b]+[t]-[11,0]-[211,0]-[-211,0]"); //missing mass
+		   MxPiPi.fill(ppippim.mass());
+	   }
+   
    }
-   
-   TCanvas c1 = new TCanvas("c1",1000,800);
-   c1.divide(1,1);
-   c1.cd(0);
-   c1.draw(MxPiPi);
+
+   //window to draw canvas and histogram on
+   JFrame frame = new JFrame("mmx"); 
+     frame.setSize(800,600);
+     f1.setParameter(0, MxPiPi.getEntries()); //resetting fit parameters to histogram specs
+     f1.setParameter(1, MxPiPi.getMean());
+     f1.setParameter(2, MxPiPi.getRMS());
+   DataFitter.fit(f1,MxPiPi,"Q"); //fit histogram
+   //canvas to draw histogram on
+     EmbeddedCanvas can = new EmbeddedCanvas(); 
+     can.divide(1, 1);
+     can.cd(0);
+     can.draw(MxPiPi);
+     can.draw(f1,"same");
+     f1.setLineColor(32);
+     f1.setLineWidth(3);
+     f1.setLineStyle(0);
+     frame.add(can);
+     frame.setVisible(true);
 
 The code loops through events and picks events corresponding to the given filter
 then gets particle for given string syntax and fills the mass histogram.
+The missing mass histogram is then fitted by a Gaussian.
+
+You should obtain the following graph.
+
+.. image:: images/MxPiPi.png
 
 
 Selecting particles
