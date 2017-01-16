@@ -16,11 +16,13 @@ CLAS12 data. to start the ring use command:
 
 .. code-block:: bash
 
-  ./bin/x-server -type evio -file sector2_000233_mode7.evio.0
+  >./bin/x-server -type evio -file sector2_000233_mode7.evio.0
 
 This will start Hipo decoded event ring. the file will be continuisly lopped through. It is 
 good for testing monitoring software. Following sections will describe how to connect to the 
-service and receive decoded data.
+service and receive decoded data. 
+
+.. note:: The EVIO file must be raw DAQ file. Otherwise empty events will be returned.
 
 Creating xMsg ring from	ET
 ==========================
@@ -30,7 +32,7 @@ ring and distribute them to client programs. To initiate an ET ring distribution
 
 .. code-block::	    bash
 
-  ./bin/x-server -type et -file /tmp/et_sys_clasprod
+  >./bin/x-server -type et -file /tmp/et_sys_clasprod
 
 The program must run on the same machine where the ET ring is running (no remote access is available).
 But the connection to xMsg Hipo ring can be done from any machine within the network. To connect to
@@ -38,12 +40,40 @@ remote ET ring. use:
 
 .. code-block::     bash
 
-  ./bin/x-server -type et -host adcecal3 -file /tmp/et_sys_clasprod2
+  >./bin/x-server -type et -host adcecal3 -file /tmp/et_sys_clasprod2
 
 The xMsg ring distribution system publishes two different streams, one for decoded HIPO data type, and
 one for raw EVIO data event, which contains composite banks with ADC pulse. User program can subscribe
 to any of these streams, to read the data by using HipoRingSource or EvioRingSource class. Both these
 classes are implementations of DataSource interface and work as disk files.
+
+Creating xMsg ring from HIPO files
+==================================
+
+A event transport ring can be also emulated from HIPO files. If the type
+HIPO is used, the events from HIPO file are passed around without any 
+conversion or decoding. To start a ring from HIPO file use:
+
+.. code-block::     bash
+
+  >./bin/x-server -type hipo -file my_simple_file.hipo
+
+To use HIPO ring, EVIO file first has to be converted to HIPO, then
+run as a HIPO ring. For DAQ EVIO files, first:
+
+.. code-block::     bash
+
+  >./bin/decoder -o my_simple_file.hipo clasrun_012345.evio.0
+
+Then use the HIPO file as a source of a event transport ring.
+If using GEMC generated file, then first convert it:
+
+.. code-block::     bash
+
+  >./bin/evio2hipo -o my_simple_file.hipo gemc_dis.evio
+
+Then use x-server utility to run a HIPO event transport ring.
+
 
 Connecting to xMsg ring (HIPO)
 ==============================
