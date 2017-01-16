@@ -2,6 +2,31 @@
 Getting Started with Java Software
 **********************************
 
+CLAS12 Software is Java based framework based on CLARA for distributed computing. 
+It is distributed a single package containing all neccessary files to work with
+CLAS12 files (mainly EVIO and HIPO), and to run reconstruction.
+
+
+Downloading Software
+====================
+
+The distribution can be downloaded from web side: https://userweb.jlab.org/~gavalian/software/coatjava
+
+To obtain latest version use:
+
+.. code-block:: bash
+
+   wget https://userweb.jlab.org/~gavalian/software/coatjava/coatjava-4a.0.0.tar.gz
+
+For older versions visit the link above.
+
+Software Documentation
+======================
+
+Java-Docs for essential components of the software can be found at:
+
+<http://clasweb.jlab.org/clas12offline/docs/javadoc>
+
 Required Software
 =================
 

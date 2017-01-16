@@ -18,80 +18,22 @@ Standard Java Library For CLAS12:
 
    gettingstarted/introduction
 
-
-CLAS12 Simulation/Reconstruction
----------------------------------
-
-* `Running gemc at JLab <https://gemc.jlab.org/gemc/html/documentation/runningJLab.html>`_
+CLAS12 Online
+-------------
 
 .. toctree::
    :maxdepth: 1
 
-   reconstruction/introduction
-   analysis/introduction
-   reconstruction/fastMonteCarlo
+   online/rawdataonline.rst   
 
-CLAS12 Input/Output Packages:
------------------------------
+CLAS12 Reconstruction
+---------------------
 
 .. toctree::
    :maxdepth: 1
 
-   io/readingRawEvioFiles
-   io/clasio
-   io/bosio
-   io/hipo
-
-Plotting Package:
------------------
-
-.. toctree::
-   :maxdepth: 1
-
-   plotting/graph_plotting
-   plotting/histogram_plotting
-   plotting/directories_and_trees
-
-Geometry Package:
------------------
-
-.. toctree::
-   :maxdepth: 1
-
-   geometry/geometryprimitives
-   geometry/geometrycontainers
-
-CCDB Database:
---------------
-
-.. toctree::
-   :maxdepth: 1
-
-   database/readingCalibrationConstants
-
-Code Development:
------------------
-
-.. toctree::
-   :maxdepth: 1
-
-   calibration/monitoringPlugins
-   development/introduction
-   calibration/calibrationModule
-
-..   reconstruction/introduction
-..   analysis/introduction
-
-..   io/clasio.rst
-..   io/bosio
-..   io/evioraw
-
-
-..   rootio/introduction
-..   io/introduction
-..   services/introduction
-..   database/introduction
-..   calibration/introduction      
+   rec/inputfiles.rst
+   
 
 
 Indices and tables
